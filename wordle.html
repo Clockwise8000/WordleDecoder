@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vigenère Decoder</title>
+    <style>
+        body, textarea {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            color: #fff;
+            font-size: 20px;
+            font-family: Arial, sans-serif;
+            border: none;
+            outline: none;
+        }
+        textarea {
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+    <textarea id="textbox" placeholder="Enter encoded text here..." autofocus></textarea>
+    <script>
+        const key = "WORDLE";
+        function decodeVigenere(input, key) {
+            input = input.toUpperCase();
+            key = key.toUpperCase();
+            let output = [];
+            let keyIndex = 0;
+            for (let i = 0; i < input.length; i++) {
+                const char = input[i];
+                if (char >= 'A' && char <= 'Z') {
+                    const charCode = char.charCodeAt(0) - 65;
+                    const keyCode = key[keyIndex % key.length].charCodeAt(0) - 65;
+                    const decodedChar = String.fromCharCode(((charCode - keyCode + 26) % 26) + 65);
+                    output.push(decodedChar);
+                    keyIndex++;
+                } else {
+                    output.push(char);
+                }
+            }
+            return output.join("");
+        }
+        document.getElementById("textbox").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                const textbox = document.getElementById("textbox");
+                textbox.value = decodeVigenere(textbox.value, key);
+            }
+        });
+    </script>
+</body>
+</html>
